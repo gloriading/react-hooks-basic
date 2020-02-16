@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoForm from './components/TodoForm';
 import TodoItem from './components/TodoItem';
 
@@ -13,6 +13,37 @@ function App() {
       isComplete: false,
     },
   ]);
+
+  const [borderColor, setBorderColor] = useState('pink');
+
+  /*
+    setBorderColor will only run when todos change
+    if given an empty array, it wil only run on the first render
+  */
+  useEffect(() => {
+    setBorderColor(getRandomColor())
+  }, [todos]);
+
+  const mainFrameStyle = {
+    padding: '2rem',
+    backgroundColor: borderColor,
+    minHeight: '100vh',
+    transition: '1s',
+  };
+
+
+  /*
+    show message for 1 second after adding a new todo
+    need to cleanup ?
+  */
+  const [visible, setVisible] = useState(false);
+  
+  useEffect(() => {
+    let timeoutId;
+    setVisible(true);
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => setVisible(false), 500);
+  }, [todos])
 
   const updateTodo = (index) => {
     const todosClone = [...todos];
@@ -33,11 +64,17 @@ function App() {
 
     setTodos(todosClone);
   };
-
+  
   return (
-    <div>
-      <h1>TODO</h1>
-      <div>
+    <div style={ mainFrameStyle }>
+      <h1 style={{ margin: '2rem 0' }}>TODO</h1>
+      <h2 className={ visible ? '' : 'hidden' } style={{ fontWeight: 200 }}>
+        You just updated your todos !
+      </h2>
+      
+      <TodoForm addTodo={addTodo} />
+
+      <div style={{ marginTop: '2rem' }}>
         { todos.map((todo, index) => (
           <TodoItem
             key={index}
@@ -47,10 +84,17 @@ function App() {
             removeTodo={removeTodo}
           />
         ))}
-        <TodoForm addTodo={addTodo} />
       </div>
     </div>
   );
 }
+
+const getRandomColor = () => {
+  const colors = ['#f8a5c2', '#f7d794', '#f3a683', '#D1C4E9', '#D7CCC8'];
+  const randomIndex = Math.floor(Math.random() * Math.floor(colors.length));
+
+  return colors[randomIndex];
+};
+
 
 export default App;
