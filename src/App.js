@@ -1,39 +1,6 @@
 import React, { useState } from 'react';
-
-function Todo({ todo, updateTodo, index, removeTodo }) {
-  return (
-    <div>
-      <p>Todo item: { todo.content }</p>
-      <p>Complete? { todo.isComplete ? 'Yes' : 'No' }</p> 
-      <button onClick={() => updateTodo(index)}>Update Status</button>
-      <br />
-      <button onClick={() => removeTodo(index)}>Remove</button>
-      <hr />
-    </div>
-  );
-}
-
-function TodoForm({ addTodo }) {
-  const [value, setValue] = useState('');
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (!value) return;
-
-    addTodo(value);
-    setValue('');
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Enter a todo..."
-        value={value}
-        onChange={e => setValue(e.target.value) } />
-    </form>
-  );
-}
+import TodoForm from './components/TodoForm';
+import TodoItem from './components/TodoItem';
 
 function App() {
   const [todos, setTodos] = useState([
@@ -72,7 +39,7 @@ function App() {
       <h1>TODO</h1>
       <div>
         { todos.map((todo, index) => (
-          <Todo
+          <TodoItem
             key={index}
             index={index}
             todo={todo}
