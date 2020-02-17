@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TodoForm from './components/TodoForm';
 import TodoItem from './components/TodoItem';
+import useMessage from './hooks/useMessage';
 
 function App() {
   const [todos, setTodos] = useState([
@@ -13,14 +14,16 @@ function App() {
       isComplete: false,
     },
   ]);
-  
-  const [borderColor, setBorderColor] = useState('pink');
+
   useEffect(() => {
     if (localStorage.getItem('hooksTodo')) {
       const savedTodos = JSON.parse(localStorage.getItem('hooksTodo'));
       setTodos(savedTodos);
     }
   }, []);
+  
+
+  const [borderColor, setBorderColor] = useState('pink');
 
   useEffect(() => {
     setBorderColor(getRandomColor());
@@ -33,20 +36,6 @@ function App() {
     minHeight: '100vh',
     transition: '1s',
   };
-
-
-  /*
-    show message for 1 second after adding a new todo
-    need to cleanup ?
-  */
-  const [visible, setVisible] = useState(false);
-  
-  useEffect(() => {
-    let timeoutId;
-    setVisible(true);
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => setVisible(false), 500);
-  }, [todos])
 
   const updateTodo = (index) => {
     const todosClone = [...todos];
@@ -73,7 +62,7 @@ function App() {
       <h1 style={{ margin: '2rem 0' }}>
         TODO <span style={{ color: 'grey' }}>WITH HOOKS</span>
       </h1>
-      <h2 className={ visible ? '' : 'hidden' } style={{ fontWeight: 200 }}>
+      <h2 className={ useMessage(todos) ? '' : 'hidden' } style={{ fontWeight: 200 }}>
         You just updated your todos !
       </h2>
       
