@@ -1,32 +1,23 @@
 import React from 'react';
 
 export default function TodoItem({ todo, updateTodo, index, removeTodo }) {
-  const mainFrameStyle = {
-    padding: '1rem',
-    border: '1px solid',
-    display: 'inline-block',
-    margin: '5px',
-  };
-
-  const buttonStyle = {
-    padding: '0.5rem 1rem',
-    marginRight: '5px',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    outline: 'none',
-    cursor: 'pointer',
-    fontSize: '0.8rem',
-    backgroundColor: 'whitesmoke',
-  };
 
   return (
-    <div style={ mainFrameStyle }>
+    <div className="item-container">
       <p>Todo item: { todo.content }</p>
-      <p>Complete? { todo.isComplete ? 'Yes' : 'No' }</p> 
-      <button style={ buttonStyle }
-        onClick={() => updateTodo(index)}>Update Status</button>
-      <button style={ buttonStyle }
-        onClick={() => removeTodo(index)}>Remove</button>
+      <p>
+        { todo.isComplete ? 'Complete' : 'Not Complete' }
+      </p>
+      <div style={{ marginTop: '2rem' }}>
+        <button className="button-base"
+          onClick={() => updateTodo(index)}>
+            Update Status
+        </button>
+        <button className="button-base"
+          onClick={() => removeTodo(index)}>
+          Remove
+        </button>
+      </div>
     </div>
   );
 }

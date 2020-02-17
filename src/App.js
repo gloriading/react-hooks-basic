@@ -13,15 +13,18 @@ function App() {
       isComplete: false,
     },
   ]);
-
+  
   const [borderColor, setBorderColor] = useState('pink');
-
-  /*
-    setBorderColor will only run when todos change
-    if given an empty array, it wil only run on the first render
-  */
   useEffect(() => {
-    setBorderColor(getRandomColor())
+    if (localStorage.getItem('hooksTodo')) {
+      const savedTodos = JSON.parse(localStorage.getItem('hooksTodo'));
+      setTodos(savedTodos);
+    }
+  }, []);
+
+  useEffect(() => {
+    setBorderColor(getRandomColor());
+    localStorage.setItem('hooksTodo', JSON.stringify(todos));
   }, [todos]);
 
   const mainFrameStyle = {
@@ -67,7 +70,9 @@ function App() {
   
   return (
     <div style={ mainFrameStyle }>
-      <h1 style={{ margin: '2rem 0' }}>TODO</h1>
+      <h1 style={{ margin: '2rem 0' }}>
+        TODO <span style={{ color: 'grey' }}>WITH HOOKS</span>
+      </h1>
       <h2 className={ visible ? '' : 'hidden' } style={{ fontWeight: 200 }}>
         You just updated your todos !
       </h2>
