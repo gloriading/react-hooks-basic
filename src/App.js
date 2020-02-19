@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import TodoForm from './components/TodoForm';
 import TodoItem from './components/TodoItem';
 import useMessage from './hooks/useMessage';
+import useLocalStorage from './hooks/useLocalStorage'
+import useRandomColor from './hooks/useRandomColor'
 
 function App() {
-  const [todos, setTodos] = useState([
+  const initialValue = [
     {
       content: 'Do dishes',
       isComplete: false,
@@ -13,63 +15,52 @@ function App() {
       content: 'Buy fruit',
       isComplete: false,
     },
-  ]);
+  ]
 
-  useEffect(() => {
-    if (localStorage.getItem('hooksTodo')) {
-      const savedTodos = JSON.parse(localStorage.getItem('hooksTodo'));
-      setTodos(savedTodos);
-    }
-  }, []);
-  
+  const [todos, setTodos] = useLocalStorage('hooksTodo', initialValue)
 
-  const [borderColor, setBorderColor] = useState('pink');
+  const backgroundColor = useRandomColor(todos)
 
-  useEffect(() => {
-    setBorderColor(getRandomColor());
-    localStorage.setItem('hooksTodo', JSON.stringify(todos));
-  }, [todos]);
+  const shouldShow = useMessage(todos)
 
   const mainFrameStyle = {
     padding: '2rem',
-    backgroundColor: borderColor,
+    backgroundColor: backgroundColor,
     minHeight: '100vh',
     transition: '1s',
   };
 
-  const updateTodo = (index) => {
+  const updateTodo = index => {
     const todosClone = [...todos];
     todosClone[index].isComplete = !todosClone[index].isComplete;
 
     setTodos(todosClone);
   };
 
-  const addTodo = (newTodoContent) => {
-    const newTodo = { content: newTodoContent, isComplete: false };
-    const todosClone = [...todos, newTodo];
-
-    setTodos(todosClone);
+  const addTodo = newTodoContent => {
+    setTodos(prev => [...prev, { content: newTodoContent, isComplete: false }]);
   };
 
-  const removeTodo = (index) => {
-    const todosClone = todos.filter((todo, idx) => idx !== index);
-
-    setTodos(todosClone);
+  const removeTodo = index => {
+    setTodos(prev => prev.filter((todo, idx) => idx !== index));
   };
-  
+
   return (
-    <div style={ mainFrameStyle }>
+    <div style={mainFrameStyle}>
       <h1 style={{ margin: '2rem 0' }}>
         TODO <span style={{ color: 'grey' }}>WITH HOOKS</span>
       </h1>
-      <h2 className={ useMessage(todos) ? '' : 'hidden' } style={{ fontWeight: 200 }}>
+      <h2
+        className={shouldShow ? '' : 'hidden'}
+        style={{ fontWeight: 200 }}
+      >
         You just updated your todos !
       </h2>
-      
+
       <TodoForm addTodo={addTodo} />
 
       <div style={{ marginTop: '2rem' }}>
-        { todos.map((todo, index) => (
+        {todos.map((todo, index) => (
           <TodoItem
             key={index}
             index={index}
@@ -82,13 +73,5 @@ function App() {
     </div>
   );
 }
-
-const getRandomColor = () => {
-  const colors = ['#f8a5c2', '#f7d794', '#f3a683', '#D1C4E9', '#D7CCC8'];
-  const randomIndex = Math.floor(Math.random() * Math.floor(colors.length));
-
-  return colors[randomIndex];
-};
-
 
 export default App;
