@@ -28,6 +28,10 @@ code {
   font-size: 0.8rem;
   background-color: transparent;
   border: 1px solid;
+  transition: 0.1s;
+}
+.button-base:hover {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .text-input {
@@ -41,11 +45,19 @@ code {
   border-Bottom: 2px solid;
 }
 
+/* Todo Container */
+.todo-container {
+  margin-top: 2rem;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
 /* TodoItem */
 .item-container {
   padding: 1rem;
   display: inline-block;
-  margin: 5px;
+  /* margin: 5px; */
   background-color: whitesmoke;
   transition: 0.5s;
   -webkit-box-shadow: 0 6px 6px -7px black;
@@ -55,4 +67,27 @@ code {
 
 .item-container:hover {
   transform: rotate(1deg);
+}
+
+.content-container p {
+  font-size: 1.2rem;  
+}
+.content-container span {
+  margin-left: 10px;
+  font-size: 0.8rem;
+  border: 1px solid;
+  padding: 2px 5px;
+  text-transform: uppercase;
+}
+.content-container {
+  padding: 10px 0;
+}
+.content-container span:hover {
+  cursor: pointer;
+}
+
+.action-container {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
 }

@@ -59,7 +59,7 @@ function App() {
 
       <TodoForm addTodo={addTodo} />
 
-      <div style={{ marginTop: '2rem' }}>
+      <div className="todo-container">
         {todos.map((todo, index) => (
           <TodoItem
             key={index}
